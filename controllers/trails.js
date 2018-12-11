@@ -10,8 +10,8 @@ exports.getTrails = (req, res, next) => {
       });
       return trailsArray;
     })
-    .then(trailsArray => {
-      res.status(200).send({ trailsArray });
+    .then(trails => {
+      res.status(200).send({ trails });
     })
     .catch(error => {
       console.log(error);

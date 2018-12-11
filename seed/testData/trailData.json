@@ -1,0 +1,37 @@
+{
+  "name": "City Trail",
+  "duration": 2700000,
+  "region": { "city": "Manchester", "lat": 53.4808, "long": -2.2426 },
+  "route": [
+    {
+      "locationRef": "projects/Tresure-hunt/databases/treasure-hunt-dcd8e/documents/locations/manc-town-hall",
+      "lat": 53.4781,
+      "long": -2.2441,
+      "name": "Town Hall"
+    },
+    {
+      "locationRef": "projects/Tresure-hunt/databases/treasure-hunt-dcd8e/documents/locations/library",
+      "lat": 53.4781,
+      "long": -2.2447,
+      "name": "Central Library"
+    },
+    {
+      "locationRef": "projects/Tresure-hunt/databases/treasure-hunt-dcd8e/documents/locations/chinaTown",
+      "lat": 53.4784,
+      "long": -2.2399,
+      "name": "Chinatown"
+    },
+    {
+      "locationRef": "projects/Tresure-hunt/databases/treasure-hunt-dcd8e/documents/locations/johnBright",
+      "lat": 53.6146,
+      "long": -2.1623,
+      "name": "Statue"
+    },
+    {
+      "locationRef": "projects/Tresure-hunt/databases/treasure-hunt-dcd8e/documents/locations/stAnn",
+      "lat": 53.4817,
+      "long": -2.2458,
+      "name": "Church"
+    }
+  ]
+}

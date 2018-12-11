@@ -6,6 +6,7 @@ yarn-debug.log*
 yarn-error.log*
 config.js
 treasure-hunt.json
+test.json
 
 # Runtime data
 pids
