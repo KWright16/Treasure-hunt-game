@@ -1,7 +1,9 @@
+const db = require("../firestore");
+
 exports.getLocationsById = (req, res, next) => {
   const { locationId } = req.params;
 
-  db.collection("trails")
+  db.collection("locations")
     .doc(locationId)
     .get()
     .then(locationDoc => {
