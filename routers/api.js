@@ -7,7 +7,5 @@ apiRouter.use("/trails", trailsRouter);
 apiRouter.use("/games", gamesRouter);
 apiRouter.use('/locations', locactionsRouter);
 
-// routes
-// locations
 
 module.exports = apiRouter;

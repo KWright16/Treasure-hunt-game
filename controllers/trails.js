@@ -1,6 +1,5 @@
 const db = require("../firestore");
 
-
 exports.getTrails = (req, res, next) => {
   db.collection("trails")
     .get()
