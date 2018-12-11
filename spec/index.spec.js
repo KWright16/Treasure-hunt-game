@@ -8,30 +8,24 @@ const testData = require("../seed/testData/index");
 const {
   trailData,
   townHallData,
-  libraryData,
-  chinatownData,
-  johnBrightData,
-  stAnnData
+  libraryData
 } = require("../seed/testData/index");
 
 describe("/api", () => {
   beforeEach(() => {
-    return seedDB(testData).then(docs => {
-      console.log(trailData);
-    });
+    return seedDB(testData).then(docs => {});
   });
   after(() => {
     console.log("done");
   });
   describe("/trails", () => {
     it("GET returns status 200 an array of all the trails", () => {
-      return request;
-      db.collection("trails")
-        .get()
+      return request
+        .get("/api/trails")
         .expect(200)
         .then(({ body: { trails } }) => {
-          console.log(trails);
-          expect(trails.length).to.equal(trailDocs.length);
+          console.log(trails[0].route);
+          expect(trails[0].route.length).to.equal(trailData.route.length);
         });
     });
   });
