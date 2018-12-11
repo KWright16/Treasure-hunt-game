@@ -16,7 +16,17 @@ const removeGame = (gamePin) => {
 exports.createGame = ( req, res, next ) => {
 
     const { gameName, trailId } = req.body;
-    const gamePin =  Math.floor(1  + (9000 - 1) * Math.random());
+    let gamePin =  Math.floor(1  + (9000 - 1) * Math.random());
+    db.collection('games').doc(`${gamePin}`).get()
+      .then((doc) => {
+          if (doc.exists) {
+              console.log('here')
+              gamePin = Math.floor(1  + (9000 - 1) * Math.random());
+          } else {
+              
+              addGame(gameName, gamePin, trailId)
+          }
+      })
 
     
 }
