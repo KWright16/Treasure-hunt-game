@@ -1,5 +1,5 @@
 const locationsRouter = require("express").Router();
-const getLocationsById = require("../controllers/locations");
+const { getLocationsById } = require("../controllers/locations");
 
 locationsRouter.route("/:locationId").get(getLocationsById);
 
