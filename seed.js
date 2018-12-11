@@ -13,15 +13,9 @@ const trailRef = db.collection("trails").doc("city-trail");
 
 batch.set(trailRef, {
   name: "City Trail",
-  duration: "45 mins",
+  duration: 2700000,
   region: { lat: 53.4808, long: -2.2426 },
-  routeRef:
-    "projects/Tresure-hunt/databases/treasure-hunt-dcd8e/documents/routes/city-trail-route-1"
-});
-
-const cityRouteRef = db.collection("routes").doc("city-trail-route-1");
-batch.set(cityRouteRef, {
-  locations: [
+  route: [
     {
       locationRef:
         "projects/Tresure-hunt/databases/treasure-hunt-dcd8e/documents/locations/manc-town-hall",
