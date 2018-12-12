@@ -72,32 +72,56 @@ const generatePin = (pinArr, pin) => {
 exports.addNewPlayer = (req, res, next) => {
   const { gameId } = req.params;
   const { playerName } = req.body;
-  db.collection("games")
-    .doc(`${gameId}`)
-    .update({
-      playersArray: admin.firestore.FieldValue.arrayUnion({
-        playerName,
-        progress: 0
-      })
+  const gameRef = db.collection("games").doc(gameId);
+
+  db.runTransaction(t => {
+
+    return t.get(gameRef)
+       .then(gameDoc => {
+         const game = gameDoc.data();
+        
+        if (game.playersArray.length === game.noOfPlayers - 1 ) {
+            const startTime = Date.now();
+           const startedGame =  { ...game, startTime}
+           t.update(gameRef, startedGame );
+        }
+
+        t.update(gameRef, {
+            playersArray: admin.firestore.FieldValue.arrayUnion({
+              playerName,
+              progress: 0
+            })
+     }) 
+      });
+
+      
     })
-    .then(() => res.status(201).send("Player added"))
+    .then(() => res.status(201).send("player added"))
     .catch(next);
 };
 
+
 exports.updatePlayerProgress = (req, res, next) => {
   const { gameId } = req.params;
+  const { end } = req.query;
   const { playerName, progress } = req.body;
   const gameRef = db.collection("games").doc(gameId);
   db.runTransaction(t => {
     return t.get(gameRef).then(game => {
+
       const newArray = game.data().playersArray.map(player => {
-        if (player.playerName === playerName) {
-          return { playerName, progress };
-        } else {
+
+        if ((player.playerName === playerName) && progress) {
+          return { ...player, progress };
+        } else if ( player.playerName === playerName && end) {
+           const totalTime = Math.round((Date.now() - game.data().startTime) / 60000);
+           return { ...player, totalTime };
+        }  else {
           return player;
         }
+
       });
       t.update(gameRef, { playersArray: newArray });
     });
-  }).then(result => res.status(201).send("Updated progress"));
+  }).then(result => res.status(201).send("Updated"));
 };
