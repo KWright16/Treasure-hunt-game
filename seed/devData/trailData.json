@@ -4,31 +4,31 @@
   "region": { "city": "Manchester", "lat": 53.4808, "long": -2.2426 },
   "route": [
     {
-      "locationRef": "projects/Tresure-hunt/databases/treasure-hunt-dcd8e/documents/locations/manc-town-hall",
+      "locationId": "manc-town-hall",
       "lat": 53.4781,
       "long": -2.2441,
       "name": "Manchester Town Hall"
     },
     {
-      "locationRef": "projects/Tresure-hunt/databases/treasure-hunt-dcd8e/documents/locations/library",
+      "locationId": "library",
       "lat": 53.4781,
       "long": -2.2447,
       "name": "Manchester Central Library"
     },
     {
-      "locationRef": "projects/Tresure-hunt/databases/treasure-hunt-dcd8e/documents/locations/chinaTown",
+      "locationId": "chinaTown",
       "lat": 53.4784,
       "long": -2.2399,
       "name": "Chinatown Arch"
     },
     {
-      "locationRef": "projects/Tresure-hunt/databases/treasure-hunt-dcd8e/documents/locations/johnBright",
+      "locationId": "johnBright",
       "lat": 53.6146,
       "long": -2.1623,
       "name": "John Bright Statue"
     },
     {
-      "locationRef": "projects/Tresure-hunt/databases/treasure-hunt-dcd8e/documents/locations/stAnn",
+      "locationId": "stAnn",
       "lat": 53.4817,
       "long": -2.2458,
       "name": "St Ann's Church"

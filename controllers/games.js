@@ -1,10 +1,10 @@
 const db = require("../firestore");
 
 
-const addGame = ( gameName, gamePin, trailId ) => {
+const addGame = ( gameName, gamePin, trailId, noOfPlayers, playersArray ) => {
 
     const gameRef = db.collection('games').doc(`${gamePin}`)
-    gameRef.set({gameName, trailId})
+    gameRef.set({gameName, trailId, noOfPlayers, playersArray, gamePin})
 
 }
 
@@ -22,6 +22,7 @@ exports.removeGame = (req, res, next) => {
 exports.createGame = ( req, res, next ) => {
 
     const { gameName, trailId, noOfPlayers } = req.body;
+    
     const docsArr = [];
     const playersArray = [];
    
