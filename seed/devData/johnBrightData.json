@@ -1,0 +1,12 @@
+{
+  "challengeType": "image",
+  "challenge": "Take a picture of John Bright Statue",
+  "analysis": {
+    "statue": 0.99,
+    "sculpture": 0.96,
+    "monument": 0.96,
+    "memorial": 0.89,
+    "landmark": 0.94
+  },
+  "answer": null
+}

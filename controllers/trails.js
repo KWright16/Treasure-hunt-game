@@ -1,14 +1,4 @@
 const db = require("../firestore");
-// const admin = require("firebase-admin");
-
-// const serviceAccount = require("../treasure-hunt.json");
-// admin.initializeApp({
-//   credential: admin.credential.cert(serviceAccount),
-//   databaseURL: "https://treasure-hunt-dcd8e.firebaseio.com"
-// });
-
-// const db = admin.firestore();
-// db.settings({ timestampsInSnapshots: true });
 
 exports.getTrails = (req, res, next) => {
   db.collection("trails")
@@ -20,8 +10,8 @@ exports.getTrails = (req, res, next) => {
       });
       return trailsArray;
     })
-    .then(trailsArray => {
-      res.status(200).send({ trailsArray });
+    .then(trails => {
+      res.status(200).send({ trails });
     })
     .catch(error => {
       console.log(error);
