@@ -31,7 +31,7 @@ exports.createGame = (req, res, next) => {
 
       return (gamePin = generatePin(
         docsArr,
-        Math.floor(1 + (9000 - 1) * Math.random())
+       String( Math.floor(1 + (9000 - 1) * Math.random()) )
       ));
     })
     .then(gamePin => {
@@ -63,7 +63,7 @@ exports.getGameByPin = (req, res, next) => {
 
 const generatePin = (pinArr, pin) => {
   if (!pinArr.includes(`${pin}`)) return pin;
-  const newPin = Math.floor(1 + (9000 - 1) * Math.random());
+  const newPin = String(Math.floor(1 + (9000 - 1) * Math.random()));
   return generatePin(pinArr, newPin);
 };
 
@@ -103,8 +103,8 @@ exports.addNewPlayer = (req, res, next) => {
 
 exports.updatePlayerProgress = (req, res, next) => {
   const { gameId } = req.params;
-  const { end } = req.query;
-  const { playerName, progress } = req.body;
+  const { end, progress } = req.query;
+  const { playerName } = req.body;
   const gameRef = db.collection("games").doc(gameId);
   db.runTransaction(t => {
     return t.get(gameRef).then(game => {
@@ -112,6 +112,8 @@ exports.updatePlayerProgress = (req, res, next) => {
       const newArray = game.data().playersArray.map(player => {
 
         if ((player.playerName === playerName) && progress) {
+          progress += 1;
+          
           return { ...player, progress };
         } else if ( player.playerName === playerName && end) {
            const totalTime = Math.round((Date.now() - game.data().startTime) / 60000);
