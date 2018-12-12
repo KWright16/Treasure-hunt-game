@@ -1,4 +1,4 @@
-const config = require("./config");
+const config = process.env.config ? process.env.config : require("./config");
 const admin = require("firebase-admin");
 // const DB_URL =
 //   process.env.NODE_ENV === "production"
@@ -12,7 +12,7 @@ const serviceAccount = process.env.treasure_hunt
 
 const fullConfig = {
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: process.env.config ? process.env.config : config
+  databaseURL: config
 };
 
 admin.initializeApp(fullConfig);
