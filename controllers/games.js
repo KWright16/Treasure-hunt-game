@@ -144,10 +144,7 @@ exports.updatePlayerProgress = (req, res, next) => {
 
 exports.analyseImage = ( req, res, next ) => {
 
-  //const { encoded } = req.body;
-  const imageFile = fs.readFileSync('/Users/rajinderkaur/Desktop/Northcoders/project/Treasure-hunt-game/controllers/3b.jpg')
-
-  var encoded = Buffer.from(imageFile).toString('base64');
+  const { encoded } = req.body;
 
   const imageReqBody = {
     "requests":[
