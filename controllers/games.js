@@ -1,5 +1,11 @@
 const db = require("../firestore");
 const admin = require("firebase-admin");
+const axios = require('axios');
+const { cloudVisionAPIkey } = require('../config');
+
+const fs = require('fs')
+
+
 
 const addGame = (gameName, gamePin, trailId, noOfPlayers, playersArray) => {
   const gameRef = db.collection("games").doc(`${gamePin}`);
@@ -135,3 +141,40 @@ exports.updatePlayerProgress = (req, res, next) => {
   }).then(result => res.status(201).send("Updated"));
 };
 
+
+exports.analyseImage = ( req, res, next ) => {
+
+  //const { encoded } = req.body;
+  const imageFile = fs.readFileSync('/Users/rajinderkaur/Desktop/Northcoders/project/Treasure-hunt-game/controllers/3b.jpg')
+
+  var encoded = Buffer.from(imageFile).toString('base64');
+
+  const imageReqBody = {
+    "requests":[
+      {
+        "image":{
+          "content": `${encoded}`
+        },
+        "features":[
+          {
+            "type":"LABEL_DETECTION",
+            "maxResults":5
+          }
+        ]
+      }
+    ]
+  }
+
+ axios.post(`https://vision.googleapis.com/v1/images:annotate?key=${cloudVisionAPIkey}`, imageReqBody)
+   .then((response) => {
+
+    const labelObj =response.data.responses[0].labelAnnotations.reduce((acc, label) => {
+      acc[label.description] = label.score
+      return acc;
+    }, {})
+
+     res.status(200).send(labelObj)
+   })
+ 
+
+}

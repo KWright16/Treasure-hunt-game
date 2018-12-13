@@ -18,3 +18,9 @@ exports.getLocationsById = (req, res, next) => {
       console.log(error);
     });
 };
+
+exports.checkAnswer = ( req, res, next ) => {
+
+  const { answer } = req.body;
+  
+}

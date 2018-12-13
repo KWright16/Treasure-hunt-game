@@ -4,7 +4,8 @@ const {
   removeGame,
   getGameByPin,
   addNewPlayer,
-  updatePlayerProgress
+  updatePlayerProgress,
+  analyseImage
 } = require("../controllers/games");
 
 gamesRouter.route("").post(createGame);
@@ -18,5 +19,8 @@ gamesRouter
   .route("/:gamePin/players")
   .post(addNewPlayer)
   .patch(updatePlayerProgress);
+
+gamesRouter.route('/:gamePin/:playerName')
+  .patch(analyseImage)
 
 module.exports = gamesRouter;

@@ -7,6 +7,7 @@ yarn-error.log*
 config.js
 treasure-hunt.json
 test.json
+visionKey.json
 
 # Runtime data
 pids
