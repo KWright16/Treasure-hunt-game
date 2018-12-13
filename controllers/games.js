@@ -8,13 +8,18 @@ const addGame = (gameName, gamePin, trailId, noOfPlayers, playersArray) => {
 
 exports.removeGame = (req, res, next) => {
   const { gamePin } = req.params;
+    
   db.collection("games")
     .doc(`${gamePin}`)
     .delete()
     .then(() => {
       res.status(201).send("deleted");
-    });
-};
+    })
+
+  }
+
+
+
 
 exports.createGame = (req, res, next) => {
   const { gameName, trailId, noOfPlayers } = req.body;
@@ -51,14 +56,17 @@ exports.getGameByPin = (req, res, next) => {
   const { gamePin } = req.params;
   db.collection("games")
     .doc(`${gamePin}`)
-    .get()
-    .then(game => {
-      if (!game.exists) {
-        res.status(400).send("No game found for that Pin");
-      } else {
-        res.status(201).send(game.data());
+    .onSnapshot( gameSnapshot => {
+
+      if (!gameSnapshot.exists) {
+        res.status(400).send('No game found for that pin')
+      } else{
+        const game = gameSnapshot.data();
+        res.status(201).send(game);
+ 
       }
-    });
+        
+    })
 };
 
 const generatePin = (pinArr, pin) => {
@@ -92,20 +100,25 @@ exports.addNewPlayer = (req, res, next) => {
       });
     });
   })
-    .then(() => res.status(201).send("player added"))
+    .then(() => res.status(201).send({playerName}))
     .catch(next);
 };
 
 exports.updatePlayerProgress = (req, res, next) => {
   const { gamePin } = req.params;
-  const { end, progress } = req.query;
+  const { end, advance } = req.query;
   const { playerName } = req.body;
   const gameRef = db.collection("games").doc(gamePin);
+
   db.runTransaction(t => {
+
     return t.get(gameRef).then(game => {
-      const newArray = game.data().playersArray.map(player => {
-        if (player.playerName === playerName && progress) {
-          progress += 1;
+      const playersArray = game.data().playersArray
+      
+      let newArray = playersArray.map(player => {
+        if (player.playerName === playerName && advance) {
+
+         let progress =  player.progress += 1;
 
           return { ...player, progress };
         } else if (player.playerName === playerName && end) {
@@ -121,3 +134,4 @@ exports.updatePlayerProgress = (req, res, next) => {
     });
   }).then(result => res.status(201).send("Updated"));
 };
+
