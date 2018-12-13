@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <h1>City Game API</h1>
+    <p>GET /api/trails<br>
+        Serves up all the trails<br>
+        <br>
+        GET /api/trails/:trailId<br>
+        Serves up a single trail<br>
+        <br>        
+        POST /api/games<br>
+        Creates a new game<br>
+        The request must be sent in the format:<br>
+        {
+            "gameName": "newGame",
+            "noOfPlayers": 4,
+            "trailId": "manchester-city-trail"
+        }
+        <br>
+        GET /api/games/:gamePin<br>
+        Serves up a single game<br>
+        <br>
+        DELETE /api/games/:gamePin<br>
+        Deletes a single game<br>
+        <br>
+        POST /api/games/:gamePin/players<br>
+        Adds a new player to a game <br>
+        Request should be in the format:<br>
+        {
+            "playerName": "Name"
+        }
+        <br>
+        PATCH /api/games/:gamePin/players?progress=true<br>
+        Increments the progress of the player by one. Requires a progress query of true<br>
+
+        <br>
+        GET /api/locations/:locationId<br>
+        Serves up the challenges for a single location<br>        
+</body>
+</html>

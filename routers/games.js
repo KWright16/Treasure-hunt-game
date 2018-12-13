@@ -15,7 +15,7 @@ gamesRouter
   .get(getGameByPin);
 
 gamesRouter
-  .route("/:gameId/players")
+  .route("/:gamePin/players")
   .post(addNewPlayer)
   .patch(updatePlayerProgress);
 

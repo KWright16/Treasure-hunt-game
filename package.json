@@ -20,6 +20,7 @@
   "homepage": "https://github.com/KWright16/Treasure-hunt-game#readme",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
     "express": "^4.16.4",
     "firebase": "^5.7.0",
     "firebase-admin": "^6.3.0"
