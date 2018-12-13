@@ -1,17 +1,46 @@
 const db = require("../firestore");
 
-exports.getPlayerById = (req, res, next) => {
-  const { playerId } = req.params;
-
+exports.getPlayers = (req, res, next) => {
+  
   db.collection("players")
-    .doc(playerId)
     .get()
-    .then(player => {
-      if (!player.exists) {
-        res.status(400).send("No player found for that ID");
-      } else {
-        res.status(200).send(player.data());
-      }
+    .then(players => {
+      const playersArray = [];
+      players.forEach(player => {
+        playersArray.push({ ...player.data(), id: player.id });
+      });
+      return playersArray;
+    })
+    .then(players => {
+      res.status(200).send({ players });
     })
     .catch(next);
 };
+
+
+
+exports.addPlayersToLeaderboard = ( req, res, next ) => {
+  const { gamePin } = req.params;
+
+   db.collection("games").doc(gamePin).get()
+     .then(game => {
+       return game.data().playersArray
+     }) 
+     .then((playersArray) => {
+
+      const batch = db.batch();
+
+      for ( let i = 0; i < playersArray.length; i++) {
+        let playerRef = db.collection('players').doc()
+
+        batch.set(playerRef, playersArray[i])
+      }
+
+      return batch.commit()
+      .then(() => res.status(201).send('added players'))
+      .catch(next)
+     
+     });
+  }
+
+      

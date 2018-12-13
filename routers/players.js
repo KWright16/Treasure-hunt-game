@@ -1,8 +1,10 @@
 const playersRouter = require("express").Router();
-const { getPlayerById } = require("../controllers/players");
+const { getPlayers, addPlayersToLeaderboard } = require("../controllers/players");
 
-//playersRouter.route('').post(createplayer);
+playersRouter.route('').get( getPlayers);
 
-playersRouter.route("/:playerId").get(getPlayerById);
+playersRouter.route('/:gamePin').post( addPlayersToLeaderboard )
+
+
 
 module.exports = playersRouter;
