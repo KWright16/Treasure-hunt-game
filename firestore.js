@@ -5,7 +5,7 @@ const admin = require("firebase-admin");
 //     ? process.env.DB_URL
 //     : require("./config");
 const serviceAccount = process.env.treasure_hunt
-  ? process.env.treasure_hunt
+  ? JSON.parse(process.env.treasure_hunt)
   : process.env.NODE_ENV === "test"
   ? require("./test.json")
   : require("./treasure-hunt.json");
