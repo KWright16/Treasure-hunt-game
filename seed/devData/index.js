@@ -4,5 +4,6 @@ module.exports = {
   libraryData: require("./libraryData"),
   chinatownData: require("./chinatownData"),
   johnBrightData: require("./johnBrightData"),
-  stAnnData: require("./stAnnData")
+  stAnnData: require("./stAnnData"),
+  adminData: require('./admin')
 };
