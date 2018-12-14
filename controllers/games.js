@@ -1,5 +1,11 @@
 const db = require("../firestore");
 const admin = require("firebase-admin");
+const axios = require('axios');
+const { cloudVisionAPIkey } = process.env.visionKey || require('../config');
+
+
+
+
 
 const addGame = (gameName, gamePin, trailId, noOfPlayers, playersArray) => {
   const gameRef = db.collection("games").doc(`${gamePin}`);
@@ -36,7 +42,7 @@ exports.createGame = (req, res, next) => {
 
       return (gamePin = generatePin(
         docsArr,
-        String(Math.floor(1 + (9000 - 1) * Math.random()))
+        (Math.floor(Math.random() * 10000) + 10000).toString().substring(1)
       ));
     })
     .then(gamePin => {
@@ -71,9 +77,10 @@ exports.getGameByPin = (req, res, next) => {
 
 const generatePin = (pinArr, pin) => {
   if (!pinArr.includes(`${pin}`)) return pin;
-  const newPin = String(Math.floor(1 + (9000 - 1) * Math.random()));
+  const newPin = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
   return generatePin(pinArr, newPin);
 };
+
 
 // ---------------------------------- Players ------------------------------//
 
@@ -135,3 +142,37 @@ exports.updatePlayerProgress = (req, res, next) => {
   }).then(result => res.status(201).send("Updated"));
 };
 
+
+exports.analyseImage = ( req, res, next ) => {
+
+  const { encoded } = req.body;
+
+  const imageReqBody = {
+    "requests":[
+      {
+        "image":{
+          "content": `${encoded}`
+        },
+        "features":[
+          {
+            "type":"LABEL_DETECTION",
+            "maxResults":5
+          }
+        ]
+      }
+    ]
+  }
+
+ axios.post(`https://vision.googleapis.com/v1/images:annotate?key=${cloudVisionAPIkey}`, imageReqBody)
+   .then((response) => {
+
+    const labelObj =response.data.responses[0].labelAnnotations.reduce((acc, label) => {
+      acc[label.description] = label.score
+      return acc;
+    }, {})
+
+     res.status(200).send(labelObj)
+   })
+ 
+
+}
