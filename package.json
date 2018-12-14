@@ -26,8 +26,12 @@
     "express": "^4.16.4",
     "firebase": "^5.7.0",
     "firebase-admin": "^6.3.0",
+<<<<<<< HEAD
+    "socket.io": "^2.2.0"
+=======
     "fs": "0.0.1-security",
     "react-geosuggest": "^2.9.0"
+>>>>>>> 78d7348d69df0c392b35a66bc0e1abcc3d8ec4f3
   },
   "devDependencies": {
     "nodemon": "^1.18.7",
