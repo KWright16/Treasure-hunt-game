@@ -1,9 +1,9 @@
 const db = require("../firestore");
 const admin = require("firebase-admin");
 const axios = require('axios');
-const { cloudVisionAPIkey } = require('../config');
+const { cloudVisionAPIkey } = process.env.visionKey || require('../config');
 
-const fs = require('fs')
+
 
 
 
