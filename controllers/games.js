@@ -1,11 +1,7 @@
 const db = require("../firestore");
 const admin = require("firebase-admin");
-const axios = require('axios');
-const { cloudVisionAPIkey } = process.env.visionKey || require('../config');
-
-
-
-
+const axios = require("axios");
+const { cloudVisionAPIkey } = process.env.visionKey || require("../config");
 
 const addGame = (gameName, gamePin, trailId, noOfPlayers, playersArray) => {
   const gameRef = db.collection("games").doc(`${gamePin}`);
@@ -14,18 +10,14 @@ const addGame = (gameName, gamePin, trailId, noOfPlayers, playersArray) => {
 
 exports.removeGame = (req, res, next) => {
   const { gamePin } = req.params;
-    
+
   db.collection("games")
     .doc(`${gamePin}`)
     .delete()
     .then(() => {
       res.status(201).send("deleted");
-    })
-
-  }
-
-
-
+    });
+};
 
 exports.createGame = (req, res, next) => {
   const { gameName, trailId, noOfPlayers } = req.body;
@@ -62,25 +54,38 @@ exports.getGameByPin = (req, res, next) => {
   const { gamePin } = req.params;
   db.collection("games")
     .doc(`${gamePin}`)
-    .onSnapshot( gameSnapshot => {
-
-      if (!gameSnapshot.exists) {
-        res.status(400).send('No game found for that pin')
-      } else{
-        const game = gameSnapshot.data();
-        res.status(201).send(game);
- 
+    .get()
+    .then(gameDoc => {
+      if (!gameDoc.exists) {
+        res.status(404).send("No such trail");
+      } else {
+        const game = gameDoc.data();
+        res.status(200).send({ game });
       }
-        
     })
+    .catch(error => {
+      console.log(error);
+    });
+  // .onSnapshot( gameSnapshot => {
+
+  //   if (!gameSnapshot.exists) {
+  //     res.status(400).send('No game found for that pin')
+  //   } else{
+  //     const game = gameSnapshot.data();
+  //     res.status(201).send(game);
+
+  //   }
+
+  // })
 };
 
 const generatePin = (pinArr, pin) => {
   if (!pinArr.includes(`${pin}`)) return pin;
-  const newPin = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
+  const newPin = (Math.floor(Math.random() * 10000) + 10000)
+    .toString()
+    .substring(1);
   return generatePin(pinArr, newPin);
 };
-
 
 // ---------------------------------- Players ------------------------------//
 
@@ -107,7 +112,7 @@ exports.addNewPlayer = (req, res, next) => {
       });
     });
   })
-    .then(() => res.status(201).send({playerName}))
+    .then(() => res.status(201).send({ playerName }))
     .catch(next);
 };
 
@@ -118,14 +123,12 @@ exports.updatePlayerProgress = (req, res, next) => {
   const gameRef = db.collection("games").doc(gamePin);
 
   db.runTransaction(t => {
-
     return t.get(gameRef).then(game => {
-      const playersArray = game.data().playersArray
-      
+      const playersArray = game.data().playersArray;
+
       let newArray = playersArray.map(player => {
         if (player.playerName === playerName && advance) {
-
-         let progress =  player.progress += 1;
+          let progress = (player.progress += 1);
 
           return { ...player, progress };
         } else if (player.playerName === playerName && end) {
@@ -142,37 +145,39 @@ exports.updatePlayerProgress = (req, res, next) => {
   }).then(result => res.status(201).send("Updated"));
 };
 
-
-exports.analyseImage = ( req, res, next ) => {
-
+exports.analyseImage = (req, res, next) => {
   const { encoded } = req.body;
 
   const imageReqBody = {
-    "requests":[
+    requests: [
       {
-        "image":{
-          "content": `${encoded}`
+        image: {
+          content: `${encoded}`
         },
-        "features":[
+        features: [
           {
-            "type":"LABEL_DETECTION",
-            "maxResults":5
+            type: "LABEL_DETECTION",
+            maxResults: 5
           }
         ]
       }
     ]
-  }
+  };
 
- axios.post(`https://vision.googleapis.com/v1/images:annotate?key=${cloudVisionAPIkey}`, imageReqBody)
-   .then((response) => {
+  axios
+    .post(
+      `https://vision.googleapis.com/v1/images:annotate?key=${cloudVisionAPIkey}`,
+      imageReqBody
+    )
+    .then(response => {
+      const labelObj = response.data.responses[0].labelAnnotations.reduce(
+        (acc, label) => {
+          acc[label.description] = label.score;
+          return acc;
+        },
+        {}
+      );
 
-    const labelObj =response.data.responses[0].labelAnnotations.reduce((acc, label) => {
-      acc[label.description] = label.score
-      return acc;
-    }, {})
-
-     res.status(200).send(labelObj)
-   })
- 
-
-}
+      res.status(200).send(labelObj);
+    });
+};
