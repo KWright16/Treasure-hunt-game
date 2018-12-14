@@ -42,7 +42,7 @@ exports.createGame = (req, res, next) => {
 
       return (gamePin = generatePin(
         docsArr,
-        String(Math.floor(1 + (9000 - 1) * Math.random()))
+        (Math.floor(Math.random() * 10000) + 10000).toString().substring(1)
       ));
     })
     .then(gamePin => {
@@ -77,9 +77,10 @@ exports.getGameByPin = (req, res, next) => {
 
 const generatePin = (pinArr, pin) => {
   if (!pinArr.includes(`${pin}`)) return pin;
-  const newPin = String(Math.floor(1 + (9000 - 1) * Math.random()));
+  const newPin = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
   return generatePin(pinArr, newPin);
 };
+
 
 // ---------------------------------- Players ------------------------------//
 
