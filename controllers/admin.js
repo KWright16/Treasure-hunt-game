@@ -1,4 +1,6 @@
 const db = require("../firestore");
+const axios = require('axios');
+const {cloudVisionAPIkey} = require('../config')
 
 exports.getAdminByName = ( req, res, next ) => {
     const { adminName } = req.params;
@@ -19,18 +21,51 @@ exports.addNewChallenge = ( req, res, next ) => {
 }
 
 exports.addNewTrail = ( req, res, next ) => {
-    const { name, region, id }  = req.body;
+
+    const { name, region }  = req.body;
+
+    const id = name.replace(/\s/g, '_').toLowerCase();
     
     db.collection('trails').doc(`${id}`)
       .set({name, region })
       .then(
-          res.status(201).send('trail added')
+          res.status(201).send({id})
       )
       .catch(next)
 }
 
 exports.addRouteToTrail = ( req, res, next) => {
-    const { routeArray } = req.body;
+    const { routeArray, id } = req.body;
+
+    const routeWithChallengeId = routeArray.map(location => {
+        return {...location, challengeId: location.locationName.replace(/\s/g, '_').toLowerCase() }
+    })
 
     
+    const locationString = routeArray.reduce((acc, location, index, routeArray) => {
+         if (index === 0) {
+             return acc += `origin=${location.lat},${location.long}&destination=${location.lat},${location.long}&waypoints=`
+         }  else if (index === routeArray.length - 1 ) {
+             return acc += `via:${location.lat},${location.long}`
+         } else {
+            return acc += `via:${location.lat},${location.long}|`
+         }
+    }, '')
+
+    axios.get(`https://maps.googleapis.com/maps/api/directions/json?${locationString}&mode=walking&key=${cloudVisionAPIkey}`)
+    .then(data => {
+        const duration =  (data.data.routes[0].legs[0].duration.value + ( 5 * routeArray.length * 60)) * 1000;
+
+        db.collection('trails').doc(`${id}`)
+        .update({
+            route: routeWithChallengeId,
+            duration
+        })
+    })
+    .then(() => {
+        res.status(201).send('updated trail')
+    })
+    .catch(next)
+
+
 }
