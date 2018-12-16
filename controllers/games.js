@@ -5,7 +5,9 @@ const { cloudVisionAPIkey } = process.env.visionKey || require("../config");
 
 const addGame = (gameName, gamePin, trailId, noOfPlayers, playersArray) => {
   const gameRef = db.collection("games").doc(`${gamePin}`);
-  gameRef.set({ gameName, trailId, noOfPlayers, playersArray, gamePin });
+  gameRef
+    .set({ gameName, trailId, noOfPlayers, playersArray, gamePin })
+    .catch(next);
 };
 
 exports.removeGame = (req, res, next) => {
@@ -16,7 +18,8 @@ exports.removeGame = (req, res, next) => {
     .delete()
     .then(() => {
       res.status(201).send("deleted");
-    });
+    })
+    .catch(next);
 };
 
 exports.createGame = (req, res, next) => {
@@ -46,7 +49,7 @@ exports.createGame = (req, res, next) => {
         .send({ gameName, gamePin, trailId, noOfPlayers, playersArray });
     })
     .catch(err => {
-      console.log("Error getting documents", err);
+      res.send("Error getting documents");
     });
 };
 
@@ -63,9 +66,7 @@ exports.getGameByPin = (req, res, next) => {
         res.status(200).send({ game });
       }
     })
-    .catch(error => {
-      console.log(error);
-    });
+    .catch(next);
   // .onSnapshot( gameSnapshot => {
 
   //   if (!gameSnapshot.exists) {
@@ -142,7 +143,9 @@ exports.updatePlayerProgress = (req, res, next) => {
       });
       t.update(gameRef, { playersArray: newArray });
     });
-  }).then(result => res.status(201).send("Updated"));
+  })
+    .then(result => res.status(201).send("Updated"))
+    .catch(next);
 };
 
 exports.analyseImage = (req, res, next) => {
@@ -179,5 +182,6 @@ exports.analyseImage = (req, res, next) => {
       );
 
       res.status(200).send(labelObj);
-    });
+    })
+    .catch(next);
 };

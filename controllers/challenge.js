@@ -14,13 +14,9 @@ exports.getChallengeById = (req, res, next) => {
         res.status(200).send({ challenge });
       }
     })
-    .catch(error => {
-      console.log(error);
-    });
+    .catch(next);
 };
 
-exports.checkAnswer = ( req, res, next ) => {
-
+exports.checkAnswer = (req, res, next) => {
   const { answer } = req.body;
-  
-}
+};

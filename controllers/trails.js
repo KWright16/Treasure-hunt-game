@@ -14,7 +14,6 @@ exports.getTrails = (req, res, next) => {
       res.status(200).send({ trails });
     })
     .catch(next);
-    
 };
 
 exports.getTrailById = (req, res, next) => {
@@ -31,7 +30,5 @@ exports.getTrailById = (req, res, next) => {
         res.status(200).send({ trail });
       }
     })
-    .catch(error => {
-      console.log(error);
-    });
+    .catch(next);
 };
