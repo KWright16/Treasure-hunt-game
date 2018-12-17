@@ -5,9 +5,7 @@ const { cloudVisionAPIkey } = process.env.visionKey || require("../config");
 
 const addGame = (gameName, gamePin, trailId, noOfPlayers, playersArray) => {
   const gameRef = db.collection("games").doc(`${gamePin}`);
-  gameRef
-    .set({ gameName, trailId, noOfPlayers, playersArray, gamePin })
-    .catch(next);
+  gameRef.set({ gameName, trailId, noOfPlayers, playersArray, gamePin });
 };
 
 exports.removeGame = (req, res, next) => {
