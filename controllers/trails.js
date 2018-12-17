@@ -18,7 +18,7 @@ exports.getTrails = (req, res, next) => {
 
 exports.getTrailById = (req, res, next) => {
   const { trailId } = req.params;
-
+  // add player name and index to body to get reversed trail for odd and even players
   db.collection("trails")
     .doc(trailId)
     .get()
