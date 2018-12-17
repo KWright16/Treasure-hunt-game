@@ -18,7 +18,8 @@ exports.getTrails = (req, res, next) => {
 
 exports.getTrailById = (req, res, next) => {
   const { trailId } = req.params;
-  // add player name and index to body to get reversed trail for odd and even players
+  const { playerName, index } = req.body;
+
   db.collection("trails")
     .doc(trailId)
     .get()
@@ -26,8 +27,9 @@ exports.getTrailById = (req, res, next) => {
       if (!trailDoc.exists) {
         res.status(404).send("No such trail");
       } else {
-        const trail = trailDoc.data();
-        res.status(200).send({ trail });
+        let trail = trailDoc.data();
+        if (index % 2 !== 0) trail.route = trail.route.reverse();
+        res.status(200).send({ trail, playerName });
       }
     })
     .catch(next);

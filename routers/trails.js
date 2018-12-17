@@ -3,6 +3,6 @@ const { getTrails, getTrailById } = require("../controllers/trails");
 
 trailsRouter.route("").get(getTrails);
 
-trailsRouter.route('/:trailId').get(getTrailById)
+trailsRouter.route("/:trailId").post(getTrailById);
 
 module.exports = trailsRouter;

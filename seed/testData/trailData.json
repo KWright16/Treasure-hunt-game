@@ -32,6 +32,12 @@
       "lat": 53.4817,
       "long": -2.2458,
       "name": "Church"
+    },
+    {
+      "locationRef": "projects/Tresure-hunt/databases/treasure-hunt-dcd8e/documents/locations/manc-town-hall",
+      "lat": 53.4781,
+      "long": -2.2441,
+      "name": "Town Hall"
     }
   ]
 }
