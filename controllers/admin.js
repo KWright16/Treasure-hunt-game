@@ -41,7 +41,11 @@ exports.addRouteToTrail = ( req, res, next) => {
         return {...location, challengeId: location.locationName.replace(/\s/g, '_').toLowerCase() }
     })
 
-    
+    const challengeIds = routeWithChallengeId.reduce((acc, location) => {
+        acc.push(location.challengeId)
+        return acc
+    }, [])
+
     const locationString = routeArray.reduce((acc, location, index, routeArray) => {
          if (index === 0) {
              return acc += `origin=${location.lat},${location.long}&destination=${location.lat},${location.long}&waypoints=`
@@ -63,9 +67,25 @@ exports.addRouteToTrail = ( req, res, next) => {
         })
     })
     .then(() => {
-        res.status(201).send('updated trail')
+        res.status(201).send({challengeIds})
     })
     .catch(next)
 
 
+}
+
+exports.updateChallenge = ( req, res, next ) => {
+    const { challengeType, question, answer, picture } = req.body;
+    const { challengeId } = req.params;
+
+    console.log(challengeType, '<<type' , question, 'ques', answer, '<<<ans', picture)
+    console.log(Object.keys(picture), "keys")
+
+}
+
+exports.deleteTrail = ( req, res, next ) => {
+    const { trailId } = req.params;
+    db.collection('trails').doc(`${trailId}`)
+      .delete()
+      .then(() => res.status(201).send('Trail Deleted'))
 }
