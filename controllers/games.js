@@ -173,13 +173,11 @@ exports.analyseImage = (req, res, next) => {
       imageReqBody
     )
     .then(response => {
-      const labelObj = response.data.responses[0].labelAnnotations.reduce(
-        (acc, label) => {
-          acc[label.description] = label.score;
-          return acc;
-        },
-        {}
-      );
+      const labelObj = response.data.responses[0].labelAnnotations.reduce((acc, label) => {
+        const { score, description } = label;
+        return { ...acc, [description]: score };
+      }, {});
+
       console.log(labelObj)
       res.status(200).send({ labelObj });
     })
