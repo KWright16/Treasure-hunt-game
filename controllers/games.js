@@ -172,8 +172,11 @@ exports.analyseImage = (req, res, next) => {
     .post(
       `https://vision.googleapis.com/v1/images:annotate?key=${cloudVisionAPIkey}`,
       imageReqBody
-    )
+    ).catch((err) => {
+      console.log(err)
+    })
     .then(response => {
+      console.log(response)
       const labelObj1 = response.data.responses[0].labelAnnotations.reduce((acc, label) => {
         const { score, description } = label;
         return { ...acc, [description]: score };
