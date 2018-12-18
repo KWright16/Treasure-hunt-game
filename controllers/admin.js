@@ -1,6 +1,6 @@
 const db = require("../firestore");
 const axios = require('axios');
-const {cloudVisionAPIkey} = require('../config')
+const {cloudVisionAPIkey} = process.env.visionKey || require('../config');
 
 exports.getAdminByName = ( req, res, next ) => {
     const { adminName } = req.params;
@@ -75,13 +75,69 @@ exports.addRouteToTrail = ( req, res, next) => {
 }
 
 exports.updateChallenge = ( req, res, next ) => {
-    const { challengeType, question, answer, picture } = req.body;
+    const { challengeType, question, answer, URL } = req.body;
     const { challengeId } = req.params;
 
-    console.log(challengeType, '<<type' , question, 'ques', answer, '<<<ans', picture)
-    console.log(Object.keys(picture), "keys")
+    if(URL) {
 
+        const imageReqBody = {
+            "requests":[
+            {
+                "image":
+                { 
+                "source":{
+                    "imageUri":
+                    `${URL}`
+                }
+                },
+                "features":[
+                {
+                    "type":"LABEL_DETECTION",
+                    "maxResults":5
+                }
+                ]
+            }
+            ]
+        }
+
+        axios.post(`https://vision.googleapis.com/v1/images:annotate?key=${cloudVisionAPIkey}`, imageReqBody)
+        .then((response) => {
+
+            const labelObj =response.data.responses[0].labelAnnotations.reduce((acc, label) => {
+            acc[label.description] = label.score
+            return acc;
+            }, {})
+            
+            return labelObj;
+        })
+        .then((labelObj) => {
+            db.collection('challenges').doc(`${challengeId}`)
+              .set({
+                  challengeType,
+                  challenge: question,
+                  analysis: labelObj
+              })
+        })
+        .then(() => {
+            console.log('update challenge doc')
+        })
+        .catch(next)
+    } else {
+        db.collection('challenges').doc(`${challengeId}`)
+            .set({
+                  challengeType,
+                  challenge: question,
+                  answer
+            })
+            .then(() => {
+              console.log('update challenge doc')
+            })
+            .catch(next)
+    }
+
+    
 }
+
 
 exports.deleteTrail = ( req, res, next ) => {
     const { trailId } = req.params;

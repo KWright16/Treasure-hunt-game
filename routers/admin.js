@@ -14,7 +14,7 @@ adminRouter.route('/:adminName/trails').post(addNewTrail).patch(addRouteToTrail)
 
 adminRouter.route('/:adminName/trails/:trailId').delete(deleteTrail)
 
-adminRouter.route('/:adminName/challenges/:challengeId').patch(updateChallenge)
+adminRouter.route('/:adminName/challenges/:challengeId').post(updateChallenge)
 
 
 module.exports = adminRouter;

@@ -146,6 +146,7 @@ exports.updatePlayerProgress = (req, res, next) => {
 exports.analyseImage = ( req, res, next ) => {
 
   const { encoded } = req.body;
+  
 
   const imageReqBody = {
     "requests":[
