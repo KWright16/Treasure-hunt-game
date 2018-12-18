@@ -146,29 +146,21 @@ exports.updatePlayerProgress = (req, res, next) => {
     .catch(next);
 };
 
-
-exports.analyseImage = ( req, res, next ) => {
-
+exports.analyseImage = (req, res, next) => {
   const { URL } = req.body;
-  
-
 
   const imageReqBody = {
-    requests: [
+    "requests": [
       {
-
-        "image":{
-          
-            "source":{
-                "imageUri":
-                `${URL}`
-            }
-
+        "image": {
+          "source": {
+            "imageUri": `${URL}`
+          }
         },
-        features: [
+        "features": [
           {
-            type: "LABEL_DETECTION",
-            maxResults: 5
+            "type": "LABEL_DETECTION",
+            "maxResults": 5
           }
         ]
       }
@@ -189,7 +181,7 @@ exports.analyseImage = ( req, res, next ) => {
         {}
       );
 
-      res.status(200).send(labelObj);
+      res.status(200).send({ labelObj });
     })
     .catch(next);
 };
