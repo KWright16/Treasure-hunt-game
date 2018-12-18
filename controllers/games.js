@@ -183,5 +183,7 @@ exports.analyseImage = (req, res, next) => {
 
       res.status(200).send({ labelObj });
     })
-    .catch(next);
+    .catch((err) => {
+      res.send(err)
+    });
 };
