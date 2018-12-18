@@ -1,7 +1,7 @@
 const db = require("../firestore");
 const admin = require("firebase-admin");
 const axios = require("axios");
-const { stringify } = require('flatted/esm')
+const { stringify } = require('flatted/cjs')
 const { cloudVisionAPIkey } = process.env.visionKey || require("../config");
 
 const addGame = (gameName, gamePin, trailId, noOfPlayers, playersArray) => {
