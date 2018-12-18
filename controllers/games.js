@@ -1,7 +1,7 @@
 const db = require("../firestore");
 const admin = require("firebase-admin");
 const axios = require("axios");
-const { stringify } = require('flatted/cjs')
+// const { stringify } = require('flatted/cjs')
 const cloudVisionAPIkey = process.env.visionKey || require("../config").cloudVisionAPIKey;
 
 const addGame = (gameName, gamePin, trailId, noOfPlayers, playersArray) => {
@@ -184,7 +184,7 @@ exports.analyseImage = (req, res, next) => {
 
       // console.log(labelObj)
 
-      res.status(200).send({ labelObj: stringify(labelObj1) });
+      res.status(200).send({ labelObj });
     })
     .catch((err) => {
       res.send(err)
