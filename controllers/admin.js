@@ -4,6 +4,7 @@ const { cloudVisionAPIkey } = process.env.visionKey
   ? process.env.visionKey
   : require("../config");
 
+  
 exports.getAdminByName = (req, res, next) => {
   const { adminName } = req.params;
 
@@ -18,7 +19,7 @@ exports.getAdminByName = (req, res, next) => {
       }
     });
 };
-
+ 
 exports.addNewChallenge = (req, res, next) => {};
 
 exports.addNewTrail = (req, res, next) => {
@@ -32,7 +33,7 @@ exports.addNewTrail = (req, res, next) => {
     .then(res.status(201).send({ id }))
     .catch(next);
 };
-
+  
 exports.addRouteToTrail = (req, res, next) => {
   const { routeArray, id } = req.body;
 
@@ -67,6 +68,7 @@ exports.addRouteToTrail = (req, res, next) => {
     .get(
       `https://maps.googleapis.com/maps/api/directions/json?${locationString}&mode=walking&key=${cloudVisionAPIkey}`
     )
+
     .then(data => {
       const duration =
         (data.data.routes[0].legs[0].duration.value +
@@ -83,29 +85,80 @@ exports.addRouteToTrail = (req, res, next) => {
     .then(() => {
       res.status(201).send({ challengeIds });
     })
-    .catch(next);
-};
+    .catch(next)
 
-exports.updateChallenge = (req, res, next) => {
-  const { challengeType, question, answer, picture } = req.body;
-  const { challengeId } = req.params;
 
-  console.log(
-    challengeType,
-    "<<type",
-    question,
-    "ques",
-    answer,
-    "<<<ans",
-    picture
-  );
-  console.log(Object.keys(picture), "keys");
-};
+}
 
-exports.deleteTrail = (req, res, next) => {
-  const { trailId } = req.params;
-  db.collection("trails")
-    .doc(`${trailId}`)
-    .delete()
-    .then(() => res.status(201).send("Trail Deleted"));
-};
+exports.updateChallenge = ( req, res, next ) => {
+    const { challengeType, question, answer, URL } = req.body;
+    const { challengeId } = req.params;
+
+    if(URL) {
+
+        const imageReqBody = {
+            "requests":[
+            {
+                "image":
+                { 
+                "source":{
+                    "imageUri":
+                    `${URL}`
+                }
+                },
+                "features":[
+                {
+                    "type":"LABEL_DETECTION",
+                    "maxResults":5
+                }
+                ]
+            }
+            ]
+        }
+
+        axios.post(`https://vision.googleapis.com/v1/images:annotate?key=${cloudVisionAPIkey}`, imageReqBody)
+        .then((response) => {
+
+            const labelObj =response.data.responses[0].labelAnnotations.reduce((acc, label) => {
+            acc[label.description] = label.score
+            return acc;
+            }, {})
+            
+            return labelObj;
+        })
+        .then((labelObj) => {
+            db.collection('challenges').doc(`${challengeId}`)
+              .set({
+                  challengeType,
+                  challenge: question,
+                  analysis: labelObj
+              })
+        })
+        .then(() => {
+            console.log('update challenge doc')
+        })
+        .catch(next)
+    } else {
+        db.collection('challenges').doc(`${challengeId}`)
+            .set({
+                  challengeType,
+                  challenge: question,
+                  answer
+            })
+            .then(() => {
+              console.log('update challenge doc')
+            })
+            .catch(next)
+    }
+
+    
+}
+
+
+exports.deleteTrail = ( req, res, next ) => {
+    const { trailId } = req.params;
+    db.collection('trails').doc(`${trailId}`)
+      .delete()
+      .then(() => res.status(201).send('Trail Deleted'))
+}
+

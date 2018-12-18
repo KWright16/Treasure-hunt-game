@@ -146,14 +146,24 @@ exports.updatePlayerProgress = (req, res, next) => {
     .catch(next);
 };
 
-exports.analyseImage = (req, res, next) => {
-  const { encoded } = req.body;
+
+exports.analyseImage = ( req, res, next ) => {
+
+  const { URL } = req.body;
+  
+
 
   const imageReqBody = {
     requests: [
       {
-        image: {
-          content: `${encoded}`
+
+        "image":{
+          
+            "source":{
+                "imageUri":
+                `${URL}`
+            }
+
         },
         features: [
           {
