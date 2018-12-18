@@ -180,7 +180,7 @@ exports.analyseImage = (req, res, next) => {
         },
         {}
       );
-
+      console.log(labelObj)
       res.status(200).send({ labelObj });
     })
     .catch((err) => {
