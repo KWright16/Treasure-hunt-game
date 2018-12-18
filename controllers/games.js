@@ -1,6 +1,7 @@
 const db = require("../firestore");
 const admin = require("firebase-admin");
 const axios = require("axios");
+const { stringify } = require('flatted/esm')
 const { cloudVisionAPIkey } = process.env.visionKey || require("../config");
 
 const addGame = (gameName, gamePin, trailId, noOfPlayers, playersArray) => {
@@ -173,13 +174,14 @@ exports.analyseImage = (req, res, next) => {
       imageReqBody
     )
     .then(response => {
-      const labelObj = response.data.responses[0].labelAnnotations.reduce((acc, label) => {
+      const labelObj1 = response.data.responses[0].labelAnnotations.reduce((acc, label) => {
         const { score, description } = label;
         return { ...acc, [description]: score };
       }, {});
 
-      console.log(labelObj)
-      res.status(200).send({ labelObj });
+      // console.log(labelObj)
+
+      res.status(200).send({ labelObj: stringify(labelObj1) });
     })
     .catch((err) => {
       res.send(err)
