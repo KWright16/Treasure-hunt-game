@@ -1,10 +1,10 @@
 const db = require("../firestore");
 const axios = require("axios");
-const { cloudVisionAPIkey } = process.env.visionKey
+const cloudVisionAPIkey = process.env.visionKey
   ? process.env.visionKey
-  : require("../config");
+  : require("../config").cloudVisionAPIkey;
 
-  
+
 exports.getAdminByName = (req, res, next) => {
   const { adminName } = req.params;
 
@@ -19,8 +19,8 @@ exports.getAdminByName = (req, res, next) => {
       }
     });
 };
- 
-exports.addNewChallenge = (req, res, next) => {};
+
+exports.addNewChallenge = (req, res, next) => { };
 
 exports.addNewTrail = (req, res, next) => {
   const { name, region } = req.body;
@@ -33,7 +33,7 @@ exports.addNewTrail = (req, res, next) => {
     .then(res.status(201).send({ id }))
     .catch(next);
 };
-  
+
 exports.addRouteToTrail = (req, res, next) => {
   const { routeArray, id } = req.body;
 
@@ -54,7 +54,7 @@ exports.addRouteToTrail = (req, res, next) => {
       if (index === 0) {
         return (acc += `origin=${location.lat},${location.long}&destination=${
           location.lat
-        },${location.long}&waypoints=`);
+          },${location.long}&waypoints=`);
       } else if (index === routeArray.length - 1) {
         return (acc += `via:${location.lat},${location.long}`);
       } else {
@@ -90,75 +90,75 @@ exports.addRouteToTrail = (req, res, next) => {
 
 }
 
-exports.updateChallenge = ( req, res, next ) => {
-    const { challengeType, question, answer, URL } = req.body;
-    const { challengeId } = req.params;
+exports.updateChallenge = (req, res, next) => {
+  const { challengeType, question, answer, URL } = req.body;
+  const { challengeId } = req.params;
 
-    if(URL) {
+  if (URL) {
 
-        const imageReqBody = {
-            "requests":[
-            {
-                "image":
-                { 
-                "source":{
-                    "imageUri":
-                    `${URL}`
-                }
-                },
-                "features":[
-                {
-                    "type":"LABEL_DETECTION",
-                    "maxResults":5
-                }
-                ]
+    const imageReqBody = {
+      "requests": [
+        {
+          "image":
+          {
+            "source": {
+              "imageUri":
+                `${URL}`
             }
-            ]
+          },
+          "features": [
+            {
+              "type": "LABEL_DETECTION",
+              "maxResults": 5
+            }
+          ]
         }
-
-        axios.post(`https://vision.googleapis.com/v1/images:annotate?key=${cloudVisionAPIkey}`, imageReqBody)
-        .then((response) => {
-
-            const labelObj =response.data.responses[0].labelAnnotations.reduce((acc, label) => {
-            acc[label.description] = label.score
-            return acc;
-            }, {})
-            
-            return labelObj;
-        })
-        .then((labelObj) => {
-            db.collection('challenges').doc(`${challengeId}`)
-              .set({
-                  challengeType,
-                  challenge: question,
-                  analysis: labelObj
-              })
-        })
-        .then(() => {
-            console.log('update challenge doc')
-        })
-        .catch(next)
-    } else {
-        db.collection('challenges').doc(`${challengeId}`)
-            .set({
-                  challengeType,
-                  challenge: question,
-                  answer
-            })
-            .then(() => {
-              console.log('update challenge doc')
-            })
-            .catch(next)
+      ]
     }
 
-    
+    axios.post(`https://vision.googleapis.com/v1/images:annotate?key=${cloudVisionAPIkey}`, imageReqBody)
+      .then((response) => {
+
+        const labelObj = response.data.responses[0].labelAnnotations.reduce((acc, label) => {
+          acc[label.description] = label.score
+          return acc;
+        }, {})
+
+        return labelObj;
+      })
+      .then((labelObj) => {
+        db.collection('challenges').doc(`${challengeId}`)
+          .set({
+            challengeType,
+            challenge: question,
+            analysis: labelObj
+          })
+      })
+      .then(() => {
+        console.log('update challenge doc')
+      })
+      .catch(next)
+  } else {
+    db.collection('challenges').doc(`${challengeId}`)
+      .set({
+        challengeType,
+        challenge: question,
+        answer
+      })
+      .then(() => {
+        console.log('update challenge doc')
+      })
+      .catch(next)
+  }
+
+
 }
 
 
-exports.deleteTrail = ( req, res, next ) => {
-    const { trailId } = req.params;
-    db.collection('trails').doc(`${trailId}`)
-      .delete()
-      .then(() => res.status(201).send('Trail Deleted'))
+exports.deleteTrail = (req, res, next) => {
+  const { trailId } = req.params;
+  db.collection('trails').doc(`${trailId}`)
+    .delete()
+    .then(() => res.status(201).send('Trail Deleted'))
 }
 
