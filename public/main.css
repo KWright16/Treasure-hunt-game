@@ -1,0 +1,22 @@
+body {
+    text-align: center;
+    font-size: 20px;
+}
+
+h1 {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    padding: 5px;
+    text-shadow: 2px 2px 5px grey;
+    font-size: 40px;
+}
+
+span {
+    background-color: lightgray;
+
+}
+
+h3 {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    padding: 7px;
+    text-shadow: 2px 2px 5px grey;
+}
