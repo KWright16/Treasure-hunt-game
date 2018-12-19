@@ -122,9 +122,7 @@ exports.updatePlayerProgress = (req, res, next) => {
 
           return { ...player, progress };
         } else if (player.playerName === playerName && end) {
-          const totalTime = Math.round(
-            (Date.now() - game.data().startTime) / 60000
-          );
+          const totalTime =  (Date.now() - game.data().startTime) ;
           return { ...player, totalTime };
         } else {
           return player;
