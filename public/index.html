@@ -4,45 +4,85 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <link rel="stylesheet" href="main.css">
+    <title>Backend Endpoints</title>
 </head>
 <body>
     <h1>City Game API</h1>
-    <p>GET /api/trails<br>
+
+    <h3>Trails</h3>
+    <span>GET</span> <b>/api/trails</b><br>
         Serves up all the trails<br>
         <br>
-        GET /api/trails/:trailId<br>
-        Serves up a single trail<br>
-        <br>        
-        POST /api/games<br>
+
+        <span>GET</span> <b>/api/trails/:trailId</b><br>
+        Serves up a single trail to view (for Admin)<br>
+        <br>  
+        <span>POST</span> <b>/api/trails/:trailId</b><br> 
+        Serves up a trail for each player according to their index. 
+        The request must be sent in the format:<br>
+        <i>{
+            "playerName": "name",
+            "index": 0
+        } </i> 
+
+        <h3>Game</h3>
+        
+        <span>POST</span> <b>/api/games</b><br>
         Creates a new game<br>
         The request must be sent in the format:<br>
-        {
+       <i> {
             "gameName": "newGame",
             "noOfPlayers": 4,
             "trailId": "manchester-city-trail"
-        }
+        } </i>
         <br>
         <br>
-        GET /api/games/:gamePin<br>
+        <span>GET</span> <b>/api/games/:gamePin</b><br>
         Serves up a single game<br>
         <br>
-        DELETE /api/games/:gamePin<br>
+        <span>DELETE</span> <b>/api/games/:gamePin</b><br>
         Deletes a single game<br>
         <br>
-        POST /api/games/:gamePin/players<br>
+        <span>POST</span> <b>/api/games/:gamePin/players</b><br>
         Adds a new player to a game <br>
         Request should be in the format:<br>
-        {
+       <i> {
             "playerName": "Name"
-        }
+        }</i>
         <br>
         <br>
-        PATCH /api/games/:gamePin/players?progress=true<br>
+        <span>PATCH</span> <b>/api/games/:gamePin/players?progress=true</b><br>
         Increments the progress of the player by one. Requires a progress query of true<br>
 
         <br>
-        GET /api/locations/:locationId<br>
-        Serves up the challenges for a single location<br>        
+
+        <span>PATCH</span> <b>/api/games/:gamePin/players?end=true</b><br>
+        Ends the game for a player and returns the 'totalTime' taken to complete the game. Requires an end query of true<br>
+        <br>
+
+        <span>PATCH</span> <b>/api/games/:gamePin/:playersName</b><br>
+        Analyse an image uploaded by the player (using Google vision API)<br>
+        Request should be in the format:<br>
+       <i> {
+            "URL": "/url/for/the/image"
+        }</i>
+        <br>
+
+        <h3>Challenges</h3>
+
+        <span>GET</span> /api/challenges/:challengeId<br>
+        Serves up the challenges for a single location<br> 
+        <br>     
+        
+        <h3>Players</h3>
+        <span>GET</span> /api/players<br>
+        Serves up all the players in leader board<br> 
+        <br>  
+
+        <span>POST</span> /api/players/:gamePin<br>
+        Adds all the players from a game to the leaderboard once the game has finished<br> 
+        <br>  
+
 </body>
 </html>

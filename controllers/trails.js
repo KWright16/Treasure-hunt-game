@@ -21,7 +21,7 @@ exports.getTrailById = (req, res, next) => {
   const { playerName, index } = req.body;
 
   db.collection("trails")
-    .doc(trailId)
+    .doc(`${trailId}`)
     .get()
     .then(trailDoc => {
       if (!trailDoc.exists) {
@@ -34,6 +34,7 @@ exports.getTrailById = (req, res, next) => {
     })
     .catch(next);
 };
+
 exports.viewTrailById = (req, res, next) => {
   const { trailId } = req.params;
 
