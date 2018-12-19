@@ -1,9 +1,9 @@
 const playersRouter = require("express").Router();
-const { getPlayers, addPlayersToLeaderboard } = require("../controllers/players");
+const { getPlayers, addPlayerToLeaderboard } = require("../controllers/players");
 
 playersRouter.route('').get( getPlayers);
 
-playersRouter.route('/:gamePin').post( addPlayersToLeaderboard )
+playersRouter.route('/:playerName').post( addPlayerToLeaderboard )
 
 
 

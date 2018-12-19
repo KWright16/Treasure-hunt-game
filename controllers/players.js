@@ -19,28 +19,21 @@ exports.getPlayers = (req, res, next) => {
 
 
 
-exports.addPlayersToLeaderboard = ( req, res, next ) => {
-  const { gamePin } = req.params;
+exports.addPlayerToLeaderboard = ( req, res, next ) => {
+  const {  playerName } = req.params;
+  const { totalTime, trailName } = req.body;
+   
+  db.collection('players').doc()
+  .set({
+    playerName, totalTime, trailName
+  })
+  .then(() => {
 
-   db.collection("games").doc(gamePin).get()
-     .then(game => {
-       return game.data().playersArray
-     }) 
-     .then((playersArray) => {
+    
+    res.status(201).send('player added to leaderboard')
+  })
 
-      const batch = db.batch();
-
-      for ( let i = 0; i < playersArray.length; i++) {
-        let playerRef = db.collection('players').doc()
-
-        batch.set(playerRef, playersArray[i])
-      }
-
-      return batch.commit()
-      .then(() => res.status(201).send('added players'))
-      .catch(next)
-     
-     });
+  
   }
 
       
