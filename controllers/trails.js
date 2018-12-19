@@ -14,11 +14,11 @@ exports.getTrails = (req, res, next) => {
       res.status(200).send({ trails });
     })
     .catch(next);
-    
 };
 
-exports.viewTrailById = (req, res, next) => {
+exports.getTrailById = (req, res, next) => {
   const { trailId } = req.params;
+  const { playerName, index } = req.body;
 
   db.collection("trails")
     .doc(`${trailId}`)
@@ -27,13 +27,27 @@ exports.viewTrailById = (req, res, next) => {
       if (!trailDoc.exists) {
         res.status(404).send("No such trail");
       } else {
-        const trail = trailDoc.data();
+        let trail = trailDoc.data();
+        if (index % 2 !== 0) trail.route = trail.route.reverse();
+        res.status(200).send({ trail, playerName });
+      }
+    })
+    .catch(next);
+};
+
+exports.viewTrailById = (req, res, next) => {
+  const { trailId } = req.params;
+
+  db.collection("trails")
+    .doc(trailId)
+    .get()
+    .then(trailDoc => {
+      if (!trailDoc.exists) {
+        res.status(404).send("No such trail");
+      } else {
+        let trail = trailDoc.data();
         res.status(200).send({ trail });
       }
     })
-    .catch(error => {
-      
-        console.log(error)
-      
-    });
+    .catch(next);
 };

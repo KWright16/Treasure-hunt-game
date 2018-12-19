@@ -32,6 +32,12 @@
       "lat": 53.4817,
       "long": -2.2458,
       "name": "St Ann's Church"
+    },
+    {
+      "challengeId": "manc-town-hall",
+      "lat": 53.4781,
+      "long": -2.2441,
+      "name": "Manchester Town Hall"
     }
   ]
 }
