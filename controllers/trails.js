@@ -17,11 +17,11 @@ exports.getTrails = (req, res, next) => {
     
 };
 
-exports.getTrailById = (req, res, next) => {
+exports.viewTrailById = (req, res, next) => {
   const { trailId } = req.params;
 
   db.collection("trails")
-    .doc(trailId)
+    .doc(`${trailId}`)
     .get()
     .then(trailDoc => {
       if (!trailDoc.exists) {
@@ -32,6 +32,8 @@ exports.getTrailById = (req, res, next) => {
       }
     })
     .catch(error => {
-      console.log(error);
+      
+        console.log(error)
+      
     });
 };

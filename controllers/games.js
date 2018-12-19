@@ -176,7 +176,7 @@ exports.analyseImage = ( req, res, next ) => {
       return acc;
     }, {})
 
-     res.status(200).send(labelObj)
+     res.status(200).send({labelObj})
    })
  
 
