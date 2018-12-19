@@ -34,3 +34,19 @@ exports.getTrailById = (req, res, next) => {
     })
     .catch(next);
 };
+exports.viewTrailById = (req, res, next) => {
+  const { trailId } = req.params;
+
+  db.collection("trails")
+    .doc(trailId)
+    .get()
+    .then(trailDoc => {
+      if (!trailDoc.exists) {
+        res.status(404).send("No such trail");
+      } else {
+        let trail = trailDoc.data();
+        res.status(200).send({ trail });
+      }
+    })
+    .catch(next);
+};
