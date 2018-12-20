@@ -8,7 +8,7 @@ const { getAdminByName,
 
 adminRouter.route("/:adminName").get(getAdminByName);
 
-adminRouter.route('/:adminName/locations').post(addNewChallenge);
+//adminRouter.route('/:adminName/challenges').post(addNewChallenge);
 
 adminRouter.route('/:adminName/trails').post(addNewTrail).patch(addRouteToTrail);
 

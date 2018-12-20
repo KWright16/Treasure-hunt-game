@@ -135,9 +135,12 @@ exports.updateChallenge = (req, res, next) => {
           })
       })
       .then(() => {
-        console.log('update challenge doc')
+        res.status(201).send('updated challenge doc')
       })
-      .catch(next)
+      .catch(err => {
+        console.log(err)
+        res.status(400).send('image error')
+      })
   } else {
     db.collection('challenges').doc(`${challengeId}`)
       .set({
@@ -146,9 +149,12 @@ exports.updateChallenge = (req, res, next) => {
         answer
       })
       .then(() => {
-        console.log('update challenge doc')
+        res.status(201).send('updated challenge doc')
       })
-      .catch(next)
+      .catch(err => {
+        console.log(err)
+        res.status(400).send('doc not updated')
+      })
   }
 
 
