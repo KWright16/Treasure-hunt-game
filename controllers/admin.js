@@ -135,7 +135,7 @@ exports.updateChallenge = (req, res, next) => {
           })
       })
       .then(() => {
-        res.status(201).send('updated challenge doc')
+        res.status(201).send('Updated Challenge')
       })
       .catch(err => {
         console.log(err)
@@ -149,7 +149,7 @@ exports.updateChallenge = (req, res, next) => {
         answer
       })
       .then(() => {
-        res.status(201).send('updated challenge doc')
+        res.status(201).send('Updated Ghallenge')
       })
       .catch(err => {
         console.log(err)
