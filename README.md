@@ -148,6 +148,7 @@ https://city-quest-game.herokuapp.com/api
 Front end app built using react native:
 https://github.com/KWright16/FE-city-quest
 
-Font end admin webpage built using react:
-https://github.com/KWright16/FE-city-quest-admin
+Front end admin webpage built using react:
+https://github.com/nicola-20/FE-CQ-admin
+
 
